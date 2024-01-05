@@ -7,6 +7,7 @@ import { store } from './src/app/store'
 import { Provider } from 'react-redux'
 
 
+
 const  App = () => {
 
   const [fontLoaded] = useFonts(fonts)
@@ -18,7 +19,7 @@ const  App = () => {
       <Provider store={store}>
         <TabNavigator/>
       </Provider>
-      
+    
     </>
   )
 }

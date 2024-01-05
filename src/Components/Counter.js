@@ -1,24 +1,43 @@
-import { StyleSheet, Text, View,Button,TextInput } from 'react-native'
-import { useState } from 'react'
+import { StyleSheet, Text, View,Button,TextInput, Pressable } from 'react-native'
 import { useSelector, useDispatch } from 'react-redux'
-import { increment ,decrement,incrementByAmount } from '../features/counter/counterSlice'
+import { decrement, increment, incrementByAmount } from '../features/counter/counterSlice'
 
 const Counter = () => {
-    const count = useSelector((state)=> state.counter.value)
-    const [amount,setAmount] = useState(0)
+    const count = useSelector(state=> state.counterReducer.value)
     const dispatch = useDispatch()
-  
 
+const confirmAdd = () => {
+  dispatch(incrementByAmount(inputToAdd))
+}
   return (
         <View style={styles.container}>
-            <Button title='Incrementar' onPress={()=> dispatch(increment())} />
-            <Text>{count}</Text>
-            <Button title='Decrementar' onPress={()=> dispatch(decrement())} />
-            <View style={styles.inputContainer}>
-                <TextInput style={styles.input} onChangeText={(t) => setAmount(parseInt(t))} />
-                <Button title='agregar' onPress={()=>dispatch(incrementByAmount(amount))}/>
-            </View>
-        </View>
+          <View style={styles.buttonsContainer}>
+            <Pressable style={styles.button}
+              onPress={()=> dispatch(decrement())}>
+              <Text style={styles.buttonText}>-</Text>
+            </Pressable>
+            <Text style={styles.span}>{count}</Text>
+            <Pressable style={styles.button}
+              onPress={()=> dispatch(increment())}>
+              <Text style={styles.buttonText}>+</Text>
+            </Pressable>
+          </View>
+          <View style={styles.buttonsContainer}>
+            <TextInput 
+                placeholder='Cantidad a aumentar'
+                value={inputToAdd}
+                onChangeText={ text => setInputToAdd(Number(text))}
+                style={styles.spanInput}
+                />
+            <Pressable style={styles.button}
+                        onPress={confirmAdd}>
+              <Text style={buttonText}>Agregar</Text>
+            </Pressable>
+          </View>
+          <Pressable style={styles.button}>
+            <Text style={styles.buttonText}>Resetear</Text>
+          </Pressable>
+          </View>
   )
 }
 

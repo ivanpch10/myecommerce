@@ -1,30 +1,28 @@
-import { Button, FlatList, Pressable, StyleSheet, Text, TextInput, View } from 'react-native'
-import Header from '../Components/Header'
+import { FlatList, StyleSheet} from 'react-native'
+
 import Search from '../Components/Search'
-import allProducts from "../Data/products.json"
 import ProductItem from '../Components/ProductItem'
 import { useEffect, useState } from 'react'
 import { colors } from '../Global/colors'
+import { useGetProductsQuery } from '../app/services/shopServices'
 
 
 const ItemListCategories = ({navigation,route}) => {
   const {category} = route.params
+  const {data,isLoading,error} = useGetProductsQuery(category)
   const [keyword,setKeyword] = useState("")
-  const [products,setProducts] = useState(allProducts)
+  const [products,setProducts] = useState()
+
+  
 
   useEffect(()=>{
+      if(!isLoading) {
+        const dataArray = Object.values(data)
+        const productsFiltered = dataArray.filter(product => product.title.includes(keyword))
+        setProducts(productsFiltered)
+      }
 
-    if(category){
-      const productsCategory = allProducts.filter(product => product.category === category)
-      const productsFiltered = productsCategory.filter(product => product.title.includes(keyword))
-      setProducts(productsFiltered)
-    }else{
-      const productsFiltered = allProducts.filter(product => product.title.includes(keyword))
-      setProducts(productsFiltered)
-    }
-
-
-  },[keyword])
+  },[keyword,data])
 
   return (
     <>
